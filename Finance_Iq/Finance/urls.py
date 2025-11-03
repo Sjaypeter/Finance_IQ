@@ -1,7 +1,18 @@
 from django.urls import path
-from .views import telex_expense_agent, telex_logs
+from . import views
 
 urlpatterns = [
-    path("a2a/financeiq/", telex_expense_agent, name="telex-expense-agent"),
-    path("agent-logs/<str:channel_id>.txt", telex_logs, name="telex-logs"),
+    # Root path - Dashboard/Index page
+    path("", views.index, name="index"),
+    
+    # Telegram webhook endpoint (POST only)
+    path("a2a/financeiq/", views.telex_expense_agent, name="telex-expense-agent"),
+    
+    # Logs endpoint (GET only)
+    path("agent-logs/<str:channel_id>.txt", views.telex_logs, name="telex-logs"),
+    
+    # Additional useful endpoints
+    path("api/health/", views.health_check, name="health-check"),
+    path("api/expenses/", views.list_expenses, name="list-expenses"),
+    path("api/summary/<str:user_id>/", views.get_summary, name="get-summary"),
 ]
